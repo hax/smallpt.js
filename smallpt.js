@@ -219,11 +219,13 @@ function radiance(r, depth) {
     }
 }
 
-function render(canvas, status) {
+void function () {
     var start = new Date().getTime();
-    var w = canvas.attributes.width.value;
-    var h = canvas.attributes.height.value;
+    var w = 256;
+    var h = 256;
     var samps = 25;
+
+    var pixels = new Uint8ClampedArray(w * h * 4);
 
     // cam pos, dir
     var cam = new Ray(new Vec(50, 52, 295.6), new Vec(0, -0.042612, -1).norm());
@@ -235,18 +237,13 @@ function render(canvas, status) {
     for (var i = 0; i < w * h; i++)
         c[i] = Vec.Zero;
 
-    // Output
-    var ctx = canvas.getContext("2d");
-    var imgdata = ctx.getImageData(0, 0, w, h);
-    var pixels = imgdata.data;
-
     // Loop over image rows
     var y = 0;
-    setTimeout(renderLine, 0);
+    renderLine();
     
     function renderLine()
     {
-        status.innerHTML = "Rendering (" + samps * 4 + " spp) " + (100.0 * y / (h - 1)).toFixed(2) + "%";
+        postMessage({status: "Rendering (" + samps * 4 + " spp) " + (100.0 * y / (h - 1)).toFixed(2) + "%"})
         
         // Loop cols
         for (var x = 0; x < w; x++) {
@@ -283,13 +280,14 @@ function render(canvas, status) {
 
         y++;
         if (y < h)
-            setTimeout(renderLine, 0);
+            renderLine();
         else
-            status.innerHTML = (new Date().getTime() - start) / 1000 + " sec";
+            postMessage({status: (new Date().getTime() - start) / 1000 + " sec"})
     }
 
     function renderOutput() {
-        var i = (h - y - 1) * w * 4, j = (h - y - 1) * w;
+
+       var i = (h - y - 1) * w * 4, j = (h - y - 1) * w;
         for (var x = 0; x < w; x++) {
             pixels[i++] = toInt(c[j].x);
             pixels[i++] = toInt(c[j].y);
@@ -298,6 +296,7 @@ function render(canvas, status) {
             j++;
         }
 
-        ctx.putImageData(imgdata, 0, 0);
+        postMessage({data: pixels})
+
     }
-}
+}()
