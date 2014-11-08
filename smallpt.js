@@ -1,3 +1,5 @@
+'use strict'
+
 function RandomLCG(seed) {
     return function() {
         seed = (214013 * seed + 2531011) % 0x100000000;
@@ -43,7 +45,7 @@ Vec.XAxis = new Vec(1, 0, 0)
 Vec.YAxis = new Vec(0, 1, 0)
 Vec.ZAxis = new Vec(0, 0, 1)
 
-Refl = {
+var Refl = {
     DIFF: 0,
     SPEC: 1,
     REFR: 2
@@ -88,7 +90,7 @@ Sphere.prototype =
 };
 
 // Scene: radius, position, emission, color, material
-spheres = [
+var spheres = [
     new Sphere(1e5, new Vec(1e5 + 1, 40.8, 81.6), Vec.Zero, new Vec(.75, .25, .25), Refl.DIFF), //Left
     new Sphere(1e5, new Vec(-1e5 + 99, 40.8, 81.6), Vec.Zero, new Vec(.25, .25, .75), Refl.DIFF), //Rght
     new Sphere(1e5, new Vec(50, 40.8, 1e5), Vec.Zero, new Vec(.75, .75, .75), Refl.DIFF), //Back
