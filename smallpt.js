@@ -1,4 +1,4 @@
-﻿function RandomLCG(seed) {
+function RandomLCG(seed) {
     return function() {
         seed = (214013 * seed + 2531011) % 0x100000000;
         return seed * (1.0 / 4294967296.0);
