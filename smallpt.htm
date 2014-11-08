@@ -12,7 +12,7 @@ worker.onmessage = function (e) {
 	if (e.data.status) {
 		document.getElementById('status').textContent = e.data.status
 	} else {
-		ctx.putImageData(new ImageData(e.data.data, 256), 0, 0)
+		ctx.putImageData(new ImageData(e.data.line, 256), 0, e.data.y)
 	}
 }
 </script>

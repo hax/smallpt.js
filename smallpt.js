@@ -225,8 +225,6 @@ void function () {
     var h = 256;
     var samps = 25;
 
-    var pixels = new Uint8ClampedArray(w * h * 4);
-
     // cam pos, dir
     var cam = new Ray(new Vec(50, 52, 295.6), new Vec(0, -0.042612, -1).norm());
     var cx = new Vec(w * .5135 / h, 0, 0);
@@ -287,16 +285,17 @@ void function () {
 
     function renderOutput() {
 
-       var i = (h - y - 1) * w * 4, j = (h - y - 1) * w;
+        var linePixels = new Uint8ClampedArray(w * 4);
+        var i = 0, j = (h - y - 1) * w;
         for (var x = 0; x < w; x++) {
-            pixels[i++] = toInt(c[j].x);
-            pixels[i++] = toInt(c[j].y);
-            pixels[i++] = toInt(c[j].z);
-            pixels[i++] = 255;
+            linePixels[i++] = toInt(c[j].x);
+            linePixels[i++] = toInt(c[j].y);
+            linePixels[i++] = toInt(c[j].z);
+            linePixels[i++] = 255;
             j++;
         }
 
-        postMessage({data: pixels})
+        postMessage({y: h - y - 1, line: linePixels})
 
     }
 }()
