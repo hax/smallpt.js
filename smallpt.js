@@ -119,7 +119,7 @@ function intersect(r) {
     var t = 1e20;
     var obj;
 
-    for (var i in spheres) {
+    for (var i = 0, n = spheres.length; i < n; i++) {
         var s = spheres[i];
         var d = s.intersect(r);
         if (d != 0 && d < t) {
